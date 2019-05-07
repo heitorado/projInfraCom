@@ -1,11 +1,6 @@
-import java.io.IOException;
-import java.net.Socket;
-import java.net.ServerSocket;
-import java.net.DatagramPacket;
-import java.net.InetAddress;
-import java.util.Date;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.net.*;
+import java.util.*;
+import java.io.*;
 
 public class TCPServer {
     public static void main(String[] args) {
