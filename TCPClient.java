@@ -10,11 +10,34 @@ public class TCPClient {
 
         try {
             Socket client = new Socket(address, port);
+
+            ObjectOutputStream output = new ObjectOutputStream(client.getOutputStream());
             ObjectInputStream input = new ObjectInputStream(client.getInputStream());
-            String msg = (String)input.readObject();
-            System.out.println(msg);
-            input.close();
-            System.out.println("Connection closed");
+            output.flush();
+
+            // Initialize string that will be used to store sent/received messages
+            String msg = "";
+            // Receives and prints the welcome message (Always the first message)
+            msg = (String)input.readObject();
+            System.out.println("Chatbot Says > " + msg);
+
+
+            // To get user input from keyboard
+            Scanner keyboard = new Scanner(System.in);
+
+            while(true){
+                // Here, it's kind of an stop-and-wait. The client sends the message, and waits for a response.
+                // Then it prints the response and the cycle continues. For having bidirectional send/receive, threads would be needed.
+                msg = keyboard.nextLine();
+
+                output.writeObject(msg);
+                output.flush();
+                System.out.println("Me > " + msg);
+
+                msg = (String)input.readObject();
+                System.out.println("Chatbot Says > " + msg);
+
+            }
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
