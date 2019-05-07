@@ -20,7 +20,7 @@ public class TCPServer {
                 System.out.println("A client has connected: " + client.getInetAddress().getHostAddress());
                 ObjectOutputStream out = new ObjectOutputStream(client.getOutputStream());
                 out.flush();
-                out.writeObject(new Date());
+                out.writeObject("Hi I am a chatbot running on TCP. Talk to me. Or don't. Whatever.");
                 out.close();
                 client.close();
             }
