@@ -65,7 +65,8 @@ public class TCPServer {
 
         for(String res : responseList) {
             for(String word : wordsList) {
-                if(res.indexOf(word) != -1){
+
+                if(word.length() > 3 && res.indexOf(word) != -1){
                     responseScore++;
                 }
             }
