@@ -30,11 +30,15 @@ public class TCPClient {
                 // Then it prints the response and the cycle continues. For having bidirectional send/receive, threads would be needed.
                 msg = keyboard.nextLine();
 
+                // Just before sending we start a timer for computing the RTT
+                long pktSentTime = System.nanoTime();
                 output.writeObject(msg);
                 output.flush();
                 System.out.println("Me > " + msg);
-
+                
                 msg = (String)input.readObject();
+                // And just as the packet is received, we calculate the RTT
+                System.out.println("RTT: " + ((System.nanoTime()-pktSentTime)/1000) + "μs");
                 System.out.println("Chatbot Says > " + msg);
 
             }
