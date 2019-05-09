@@ -50,7 +50,8 @@ public class UDPServer{
                 serverSock.receive(pkt_to_receive);
 
                 // Evaluate which message from the file will be sent back to the client
-                String recvMsgStr = new String(pkt_to_receive.getData());
+                String recvMsgStr = new String(pkt_to_receive.getData(), pkt_to_receive.getOffset(),pkt_to_receive.getLength(), "UTF-8");
+                System.out.println("Client sent: " + recvMsgStr);
                 responseMsg = getResponse(botResponses, recvMsgStr);
 
                 // Send response back to client, using the IP and PORT info from the received packet.

@@ -33,7 +33,7 @@ public class UDPClient{
                 clientSock.receive(pkt_to_receive);
                 // And just as the packet is received, we calculate the RTT, print the message from the server and then the RTT calculated
                 long rtt = (System.nanoTime()-pktSentTime)/1000;
-                String recvMsgStr = new String(pkt_to_receive.getData());
+                String recvMsgStr = new String(pkt_to_receive.getData(), pkt_to_receive.getOffset(), pkt_to_receive.getLength(), "UTF-8");
                 System.out.println("Server > " + recvMsgStr);
                 System.out.println("RTT: " + rtt + "μs");
 
