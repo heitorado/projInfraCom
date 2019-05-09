@@ -1,6 +1,6 @@
+package chatbot;
 import java.net.*;
 import java.util.*;
-import java.io.*;
 
 public class UDPClient{
     public static void main(String[] args) throws SocketException, UnknownHostException {
