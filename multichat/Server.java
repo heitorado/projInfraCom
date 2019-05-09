@@ -1,50 +1,66 @@
 package multichat;
+
+import java.io.UnsupportedEncodingException;
 import java.net.*;
 import java.util.*;
 
 public class Server {
 
-    public static void addUserToServer(Set<User> clients_list, User c){
+    public static void addUserToServer(ArrayList<User> clients_list, User c) {
         clients_list.add(c);
         return;
     }
 
-    public static void broadcast(DatagramSocket sock, DatagramPacket pkt, Set<User> clients_list){
-        byte[] msg = pkt.getData();
-        int i;
-
-        for (User c : clients_list) {
-            try {
-                //if(c.getUserIP() != pkt.getAddress() && c.getUserPort() != pkt.getPort()){
-                    DatagramPacket broadcast_packet = new DatagramPacket(msg, msg.length, c.getUserIP(), c.getUserPort());
-                    sock.send(broadcast_packet);
-                //}
-            } catch (Exception e) {
-                System.out.println("ERROR BROADCASTING: " + e);   
+    public static void broadcast(DatagramSocket sock, DatagramPacket pkt, ArrayList<User> clients_list) {
+        try {
+            String msgStr = new String(pkt.getData(), pkt.getOffset(), pkt.getLength(), "UTF-8");
+            int client_id = clients_list.indexOf(new User(pkt.getAddress(), pkt.getPort())); 
+            msgStr = Integer.toString(client_id) + " > " + msgStr;
+            byte[] msg = msgStr.getBytes();;
+            
+            for (User c : clients_list) {
+                try {
+                    if(c.getUserIP() != pkt.getAddress() && c.getUserPort() != pkt.getPort()){
+                        DatagramPacket broadcast_packet = new DatagramPacket(msg, msg.length, c.getUserIP(), c.getUserPort());
+                        sock.send(broadcast_packet);
+                    }
+                } catch (Exception e) {
+                    System.out.println("ERROR BROADCASTING: " + e);   
+                }
             }
+        } catch (Exception e) {
+            System.out.println("ERROR BROADCASTING: " + e);   
         }
     }
-
+        
     public static void main(String[] args) throws SocketException {
 
         DatagramSocket serverSock = new DatagramSocket(8001);
         System.out.println("Server listening on port 8001!");
 
-        Set<User> clientsConnected = new HashSet<User>();
+        ArrayList<User> clientsConnected = new ArrayList<User>();
         
         byte[] recvMsg = new byte[1024];
-        String responseMsg;
 
         while(true){
             try {
                 // Receive client packet
                 DatagramPacket received_packet = new DatagramPacket(recvMsg, recvMsg.length);
                 serverSock.receive(received_packet);
-                User cli = new User(received_packet.getAddress(), received_packet.getPort());
-                addUserToServer(clientsConnected, cli);
 
-                // Broadcast the packet
-                broadcast(serverSock, received_packet, clientsConnected);
+                // Evaluate if the client has just entered the chat room or if it's a message from him
+                // If it has just entered, register it on the current users list.
+                // If it has sent a message, broadcast it.
+                String recvStringMsg = new String(received_packet.getData(), received_packet.getOffset(), received_packet.getLength(), "UTF-8");
+                if(recvStringMsg.equals("HELO")){
+                    User cli = new User(received_packet.getAddress(), received_packet.getPort());
+                    addUserToServer(clientsConnected, cli);
+                }
+                else{
+                    // Broadcast the packet
+                    broadcast(serverSock, received_packet, clientsConnected);
+                }
+
 
             } catch (Exception e) {
                 System.out.println("ERROR: " + e);   
@@ -71,24 +87,28 @@ class User {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
+    public boolean equals(Object o) { 
+  
+        if (o == this) { 
+            return true; 
+        } 
+  
+        if (!(o instanceof User)) { 
+            return false; 
+        } 
+          
+        User other = (User) o; 
+          
+        return user_ip.equals(other.user_ip) && user_port == other.user_port; 
+    } 
 
-        if (!User.class.isAssignableFrom(obj.getClass())) {
-            return false;
-        }
-
-        final User other = (User) obj;
-        if ( this.user_ip != other.user_ip ) {
-            return false;
-        }
-
-        if (this.user_port != other.user_port) {
-            return false;
-        }
-
-        return true;
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 53 * hash + this.user_ip.hashCode();
+        hash = 53 * hash + this.user_port;
+        return hash;
     }
+
+
 }
