@@ -37,9 +37,10 @@ public class TCPClient {
                 System.out.println("Me > " + msg);
                 
                 msg = (String)input.readObject();
-                // And just as the packet is received, we calculate the RTT
-                System.out.println("RTT: " + ((System.nanoTime()-pktSentTime)/1000) + "μs");
+                // And just as the packet is received, we calculate the RTT, print the message from the server and then the RTT calculated
+                long rtt = (System.nanoTime()-pktSentTime)/1000;
                 System.out.println("Chatbot Says > " + msg);
+                System.out.println("RTT: " + rtt + "μs");
 
             }
         } catch (Exception e) {

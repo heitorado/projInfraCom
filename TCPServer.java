@@ -29,7 +29,7 @@ public class TCPServer {
             output.flush();
 
             // Sends the welcome message first
-            output.writeObject("Hi I am a chatbot running on TCP. Talk to me. Or don't. Whatever.");
+            output.writeObject("Hi I am a chatbot running on TCP. Ask me for quotes in the format \"Tell me a quote from {series/movie name}\"");
             
             // Initializes the string for storing sent and received messages
             String msg = "";
@@ -54,38 +54,49 @@ public class TCPServer {
 
 
     static String getResponse(List<String> responseList, String clientMessage){
-        
-        String[] wordArray = clientMessage.split(" ");
-        List<String> wordsList = Arrays.asList(wordArray);        
 
-        List<String> possibleResponses = new ArrayList<String>();
+        int id = responseList.size()-1;
 
-        String botResponse = "";
-        int responseScore = 0;
-
-        for(String res : responseList) {
-            for(String word : wordsList) {
-
-                if(word.length() > 3 && res.indexOf(word) != -1){
-                    responseScore++;
-                }
-            }
-
-            if(responseScore > 0){
-                possibleResponses.add(res);
-                responseScore = 0;
-            }
+        if(clientMessage.equals("Tell me a quote from Back To The Future") ){
+            id = 0;
+        }
+        else if(clientMessage.equals("Tell me a quote from Ghostbusters")){
+            id = 1;
+        }
+        else if(clientMessage.equals("Tell me a quote from Harry Potter")){
+            id = 2;
+        }
+        else if(clientMessage.equals("Tell me a quote from The Hitchhiker's Guide To The Galaxy")){
+            id = 3;
+        }
+        else if(clientMessage.equals("Tell me a quote from Star Wars")){
+            id = 4;
+        }
+        else if(clientMessage.equals("Tell me a quote from V For Vendetta")){
+            id = 5;
+        }
+        else if(clientMessage.equals("Tell me a quote from BoJack Horseman")){
+            id = 6;
+        }
+        else if(clientMessage.equals("Tell me a quote from Friends")){
+            id = 7;
+        }
+        else if(clientMessage.equals("Tell me a quote from How I Met Your Mother")){
+            id = 8;
+        }
+        else if(clientMessage.equals("Tell me a quote from Rick And Morty")){
+            id = 9;
+        }
+        else if(clientMessage.equals("Tell me a quote from Simpsons")){
+            id = 10;
+        }
+        else if(clientMessage.equals("Tell me a quote from South Park")){
+            id = 11;
+        }
+        else if(clientMessage.equals("Tell me a quote from The Fresh Prince Of Bel Air")){
+            id = 12;
         }
 
-        Random randomSelector = new Random();
-
-        if(possibleResponses.isEmpty()){
-            botResponse = responseList.get( randomSelector.nextInt(responseList.size()) );
-        }
-        else{
-            botResponse = possibleResponses.get( randomSelector.nextInt(possibleResponses.size()) );
-        }
-
-        return botResponse;
+        return responseList.get(id);
     }
 }
