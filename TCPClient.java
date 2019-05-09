@@ -2,6 +2,28 @@ import java.net.*;
 import java.util.*;
 import java.io.*;
 
+/*
+    This is a simple implementation of a chat via TCP. The client connects with the server (TCPServer.java)
+    that is a chatbot with 13 quotes from some movies or TV series. Inputting the correct sentence will give
+    you back a quote, while any other stuff will give you back a default sentence.
+
+    The accepted sentences are (without the surrounding ""):
+
+    "Tell me a quote from Back To The Future"
+    "Tell me a quote from Ghostbusters"
+    "Tell me a quote from Harry Potter"
+    "Tell me a quote from The Hitchhiker's Guide To The Galaxy"
+    "Tell me a quote from Star Wars"
+    "Tell me a quote from V For Vendetta"
+    "Tell me a quote from BoJack Horseman"
+    "Tell me a quote from Friends"
+    "Tell me a quote from How I Met Your Mother"
+    "Tell me a quote from Rick And Morty"
+    "Tell me a quote from Simpsons"
+    "Tell me a quote from South Park"
+    "Tell me a quote from The Fresh Prince Of Bel Air"
+*/
+
 public class TCPClient {
     
     public static void main(String[] args) {
