@@ -4,9 +4,30 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+/*
+    This is a simple implementation of a chat via TCP. The client connects with the server (TCPServer.java)
+    that is a chatbot with 13 quotes from some movies or TV series. Inputting the correct sentence will give
+    you back a quote, while any other stuff will give you back a default sentence.
+
+    The accepted sentences are (without the surrounding ""):
+
+    "Tell me a quote from Back To The Future"
+    "Tell me a quote from Ghostbusters"
+    "Tell me a quote from Harry Potter"
+    "Tell me a quote from The Hitchhiker's Guide To The Galaxy"
+    "Tell me a quote from Star Wars"
+    "Tell me a quote from V For Vendetta"
+    "Tell me a quote from BoJack Horseman"
+    "Tell me a quote from Friends"
+    "Tell me a quote from How I Met Your Mother"
+    "Tell me a quote from Rick And Morty"
+    "Tell me a quote from Simpsons"
+    "Tell me a quote from South Park"
+    "Tell me a quote from The Fresh Prince Of Bel Air"
+*/
 public class UDPServer{
     public static void main(String[] args) throws SocketException {
-        String filename = "botAnswersFaker.txt";
+        String filename = "botAnswers.txt";
         List<String> botResponses = new ArrayList<String>();
 
         try {
@@ -44,38 +65,49 @@ public class UDPServer{
     }
 
     static String getResponse(List<String> responseList, String clientMessage){
-        
-        String[] wordArray = clientMessage.split(" ");
-        List<String> wordsList = Arrays.asList(wordArray);        
 
-        List<String> possibleResponses = new ArrayList<String>();
+        int id = responseList.size()-1;
 
-        String botResponse = "";
-        int responseScore = 0;
-
-        for(String res : responseList) {
-            for(String word : wordsList) {
-
-                if(word.length() > 3 && res.indexOf(word) != -1){
-                    responseScore++;
-                }
-            }
-
-            if(responseScore > 0){
-                possibleResponses.add(res);
-                responseScore = 0;
-            }
+        if(clientMessage.equals("Tell me a quote from Back To The Future") ){
+            id = 0;
+        }
+        else if(clientMessage.equals("Tell me a quote from Ghostbusters")){
+            id = 1;
+        }
+        else if(clientMessage.equals("Tell me a quote from Harry Potter")){
+            id = 2;
+        }
+        else if(clientMessage.equals("Tell me a quote from The Hitchhiker's Guide To The Galaxy")){
+            id = 3;
+        }
+        else if(clientMessage.equals("Tell me a quote from Star Wars")){
+            id = 4;
+        }
+        else if(clientMessage.equals("Tell me a quote from V For Vendetta")){
+            id = 5;
+        }
+        else if(clientMessage.equals("Tell me a quote from BoJack Horseman")){
+            id = 6;
+        }
+        else if(clientMessage.equals("Tell me a quote from Friends")){
+            id = 7;
+        }
+        else if(clientMessage.equals("Tell me a quote from How I Met Your Mother")){
+            id = 8;
+        }
+        else if(clientMessage.equals("Tell me a quote from Rick And Morty")){
+            id = 9;
+        }
+        else if(clientMessage.equals("Tell me a quote from Simpsons")){
+            id = 10;
+        }
+        else if(clientMessage.equals("Tell me a quote from South Park")){
+            id = 11;
+        }
+        else if(clientMessage.equals("Tell me a quote from The Fresh Prince Of Bel Air")){
+            id = 12;
         }
 
-        Random randomSelector = new Random();
-
-        if(possibleResponses.isEmpty()){
-            botResponse = responseList.get( randomSelector.nextInt( responseList.size() ) );
-        }
-        else{
-            botResponse = possibleResponses.get( randomSelector.nextInt( possibleResponses.size() ) );
-        }
-
-        return botResponse;
+        return responseList.get(id);
     }
 }
